@@ -1,0 +1,14 @@
+{
+  "name": "crawloproject",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "npm start server.js --prefix server",
+    "client": "npm start --prefix client",
+    "scrape": "npm start --prefix client & npm  start server.js --prefix server "
+  },
+  "author": "",
+  "license": "ISC"
+}
