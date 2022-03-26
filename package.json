@@ -5,9 +5,10 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "install": "npm install --prefix client && npm install --prefix server",
     "server": "npm start server.js --prefix server",
     "client": "npm start --prefix client",
-    "scrape": "npm start --prefix client & npm  start server.js --prefix server "
+    "scrape": "npm run client &  npm run server "
   },
   "author": "",
   "license": "ISC"

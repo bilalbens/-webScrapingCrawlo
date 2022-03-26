@@ -7,6 +7,7 @@ import Card from "./Card";
 function App(props) {
 
   const [products, setProduct] = useState([])
+  const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(true)
 
   async function httpGetProduct() {
@@ -16,10 +17,16 @@ function App(props) {
   }
 
   const getProducts = useCallback(async () => {
-    const productslist = await httpGetProduct();
-    setProduct(productslist);
+    //response from backend
+    const response = await httpGetProduct();
+
+    //products
+    setProduct(response.products);
+    //categories
+    setCategories(response.categories);
     setLoading(false)
-    console.log(productslist)
+    console.log(response.products)
+    console.log(response.categories)
 
 
   }, []);
@@ -30,7 +37,31 @@ function App(props) {
   }, [getProducts])
   
 
+let product = {
+  name:'Portátil - Asus VivoBook 14 K413EA-EB695, 14" Full…ntel® Core™ i5-1135G7, 16 GB, 512 GB, FDOS, Negro ntel® Core™ i5-1135G7, 16 GB, 512 GB, FDOS, Negro',
+  url: 'https://www.mediamarkt.es/es/product/_portatil-asu…tm-i5-1135g7-16-gb-512-gb-fdos-negro-1529410.html',
+  price: '699', 
+  brand: 'Asus', 
+  category: 'Portátiles de 14" a 16.9" '
+}
 
+let product2 = {
+  name:'Portátil - Asus VivoBook 14 K413EA-EB695, 14" Full…ntel® Core™ i5-1135G7, 16 GB, 512 GB, FDOS, Negro',
+  url: 'https://www.mediamarkt.es/es/product/_portatil-asu…tm-i5-1135g7-16-gb-512-gb-fdos-negro-1529410.html',
+  price: '699', 
+  brand: 'Asus', 
+  category: 'Portátiles de 14" a 16.9" ',
+  specifications: [
+    {
+    key:"processeur",
+    value:"intel"
+  },
+  {
+    key:"processeur",
+    value:"intel"
+  }
+]
+}
 
 if(loading){
   return (
@@ -46,23 +77,27 @@ if(loading){
 
 
   return (
-          <div className="container pt-5 ">
+          <div className="container  " style={{margin:"auto", padding:"0px"}}>
               <div className="row pt-5 text-center ">
-                  <div className="col-3 boxshadow mx-4 ">
-                    categories
-                    <ul className="list-group">
-                    {products.map((p,i)=>(
-                            <li class="list-group-item" key={i}> {p.category}</li>
-                      ))}
+                  <div className="col-3  ">
+                    <h3 className="boxshadow" style={{textAlign:"left", padding:"25px"}}>Categories</h3>
+                    
+                    <ul className="list-group boxshadow py-2">
+                        {categories.map((category,i)=>(
+                                <li class="list-group-item " key={i}> {category.name}</li>
+                          ))}
                     </ul>
                   </div>
-                  <div className="col-8 boxshadow">
-                    Products
-                    <div className="d-flex flex-wrap justify-content-around">
-                      {products.map((p,i)=>(
-                            <Card product={p} key={i}></Card>
-                      ))}
+                  <div className="col-9 ">
+                    
+                    <h3 className="boxshadow" style={{textAlign:"left", padding:"25px"}}> Products</h3>
 
+                    <div className="d-flex flex-wrap justify-content-around boxshadow">
+                      {products.map((p,i)=>(
+                             <Card product={p} key={i}></Card>
+                      ))}
+                     {/* <Card product={product} key={1}></Card>
+                     <Card product={product2} key={2}></Card> */}
                     </div>
                   </div>
               </div>

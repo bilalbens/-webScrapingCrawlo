@@ -3,6 +3,7 @@ let latestProductNumber = 0;
 const products = new Map();
 
 
+
 function addNewProduct(product){
     latestProductNumber++;
     products.set(
@@ -13,10 +14,11 @@ function addNewProduct(product){
     )
 }
 
-
 async function getAllProducts(){
     return  Array.from(products.values())
 }
+
+
 
 
 module.exports={

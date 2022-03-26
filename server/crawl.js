@@ -4,6 +4,16 @@ const{
     getAllProducts
     } =require('./AddProduct')
 
+const{ 
+    addCategory,
+    getAllCategories
+    } =require('./AddCategory')
+
+
+
+
+
+
 const crawl = async () => {
     const browser = await puppeteer.launch({
         headless:false,
@@ -60,19 +70,36 @@ const crawl = async () => {
                     
                     
     //Portátiles de 14" a 16.9"
-    const Portátiles_de_14_a_16_9 = await PortátilesCategories[1].$eval('a', a => a.innerText)
+    let Portátiles_de_14_a_16_9 = await PortátilesCategories[1].$eval('a', a => a.innerText)
+    Portátiles_de_14_a_16_9 = await Portátiles_de_14_a_16_9.split("(").shift()
+
+    //add category 
+    let newCategory1 ={};
+    newCategory1['name'] = Portátiles_de_14_a_16_9;
+    addCategory(newCategory1)
+
     // console.log('PortátilesCategories name: ', Portátiles_de_14_a_16_9)
     const Portátiles_de_14_a_16_9LiButton = await PortátilesCategories[1].$("a")
     await Portátiles_de_14_a_16_9LiButton.evaluate(b => b.click());
     await page.waitForNavigation();
+
+    //load more product
+    // await page.waitForSelector(".dmRvCm")
+    // const loadMoreButton = await page.$("button.cUpAbt")
+    // await loadMoreButton.evaluate(b => b.click());
+    // await page.waitForNavigation();
+
                     
     //Portátiles_de_14_a_16_9 products
     await page.waitForSelector(".ProductContainer-hvvgwa-1")
     const Portátiles_de_14_a_16_9Products = await page.$$(".bilJsB ")
-                    
-    for (const p of Portátiles_de_14_a_16_9Products){                
+    
+    for (const p of Portátiles_de_14_a_16_9Products){  
+
             //category
-            const pCategory = Portátiles_de_14_a_16_9
+            let pCategory = Portátiles_de_14_a_16_9
+
+
             //name
             const pname = await p.$eval('a.cOmqtX p.doYUxh', n => n.innerHTML)
             //url
@@ -85,11 +112,14 @@ const crawl = async () => {
                     
             //brand
             const myArr = await pname.split(" ");
-            myArr[0] === 'Apple' ?  brand =  myArr[0] : brand =  myArr[2]
-            myArr[2] === '-' ?  brand =  myArr[3] : brand =  myArr[2]
+            let index = await myArr.indexOf("-");
+            myArr[0] === 'Apple' ?  brand =  myArr[0] : brand =  myArr[index+1]
+            
     
             //delivery
-            const delivery = await p.$eval('.izkVco', a => a.innerText)
+            await p.waitForSelector(".iPyFyN")
+            let delivery = await p.$eval('.iPyFyN > span.egVdxU', a => a.innerText)
+            // delivery = await delivery.split(" ").pop()
     
             
             //specifications
@@ -123,12 +153,22 @@ const crawl = async () => {
                     
                     
     // Convertibles 2 en 1
-
+    
     page.goBack()
     await page.waitForNavigation();
     await page.waitForSelector(".TreeFacetList-sc-1aagwg-0")
+    await page.waitForSelector(".cXecqj")
     PortátilesCategories = await page.$$(".cXecqj > li.cqBkQN")
-    const Convertibles_2_en_1 = await PortátilesCategories[3].$eval('a', a => a.innerText)
+
+    let Convertibles_2_en_1 = await PortátilesCategories[3].$eval('a', a => a.innerText)
+    Convertibles_2_en_1 = await Convertibles_2_en_1.split("(").shift()
+    
+    //add category 
+    let newCategory2 ={};
+    newCategory2['name'] = Convertibles_2_en_1;
+    addCategory(newCategory2)
+
+
     // console.log('Convertibles_2_en_1 name: ', Convertibles_2_en_1)
     const Convertibles_2_en_1LiButton = await PortátilesCategories[3].$("a")
     await Convertibles_2_en_1LiButton.evaluate(b => b.click());
@@ -140,7 +180,7 @@ const crawl = async () => {
     for (const p of Convertibles_2_en_1Products){
         
         //category
-        const pCategory = Convertibles_2_en_1
+        let pCategory = Convertibles_2_en_1
         //name
         await p.waitForSelector(".cOmqtX")
         const pname = await p.$eval('a.cOmqtX p.doYUxh', n => n.innerHTML)
@@ -153,12 +193,14 @@ const crawl = async () => {
         
 
         //brand
-        const myArr = await pname.split(" ");
-        myArr[0] === 'Apple' ?  brand =  myArr[0] : brand =  myArr[2]
-        myArr[4] === '-' ?  brand =  myArr[4] : brand =  myArr[5]
+       const myArr = await pname.split(" ");
+       let index = await myArr.indexOf("-");
+       myArr[0] === 'Apple' ?  brand =  myArr[0] : brand =  myArr[index+1]
 
         //delivery
-        const delivery = await p.$eval('.izkVco', a => a.innerText)
+        await p.waitForSelector(".iPyFyN")
+        let delivery = await p.$eval('.iPyFyN > span.egVdxU', a => a.innerText)
+        // delivery = await delivery.split(" ").pop()
 
         
         //specifications
@@ -194,7 +236,13 @@ const crawl = async () => {
     await browser.close();
     console.log('products scraped successfully')
     // console.log(getAllProducts())
-    return await getAllProducts()
+    // console.log(getAllCategories())
+    
+
+    return {
+            products: await getAllProducts(),
+            categories: await getAllCategories()
+            }
     
 }
 module.exports = {crawl}
