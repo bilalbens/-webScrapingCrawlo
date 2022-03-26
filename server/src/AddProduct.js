@@ -19,9 +19,14 @@ async function getAllProducts(){
 }
 
 
+function clearProductsList(){
+    return products.clear()
+}
+
 
 
 module.exports={
     addNewProduct,
-    getAllProducts
+    getAllProducts,
+    clearProductsList
 }

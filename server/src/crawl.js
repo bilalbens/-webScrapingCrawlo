@@ -1,12 +1,14 @@
 const puppeteer = require('puppeteer');
 const{ 
     addNewProduct,
-    getAllProducts
+    getAllProducts,
+    clearProductsList
     } =require('./AddProduct')
 
 const{ 
     addCategory,
-    getAllCategories
+    getAllCategories,
+    clearCategoriesList
     } =require('./AddCategory')
 
 
@@ -73,7 +75,9 @@ const crawl = async () => {
     let Portátiles_de_14_a_16_9 = await PortátilesCategories[1].$eval('a', a => a.innerText)
     Portátiles_de_14_a_16_9 = await Portátiles_de_14_a_16_9.split("(").shift()
 
-    //add category 
+    //clear the categories list
+    clearCategoriesList() 
+    //add category
     let newCategory1 ={};
     newCategory1['name'] = Portátiles_de_14_a_16_9;
     addCategory(newCategory1)
@@ -94,6 +98,8 @@ const crawl = async () => {
     await page.waitForSelector(".ProductContainer-hvvgwa-1")
     const Portátiles_de_14_a_16_9Products = await page.$$(".bilJsB ")
     
+    //clear products list
+    clearProductsList()
     for (const p of Portátiles_de_14_a_16_9Products){  
 
             //category

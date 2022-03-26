@@ -17,9 +17,15 @@ async function getAllCategories(){
 }
 
 
+function clearCategoriesList(){
+    return categories.clear()
+}
+
+
 
 
 module.exports={
     addCategory,
-    getAllCategories
+    getAllCategories,
+    clearCategoriesList
 }
