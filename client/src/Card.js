@@ -1,6 +1,6 @@
 import React from 'react'
 // import moment from 'moment'
-import "./card.css"
+import "./css/card.css"
 
 
 
@@ -12,7 +12,7 @@ const Card=({product})=> {
 
                     <div className="cardBody">
                         <div className="productPhoto">
-                                <p>product Photo</p> 
+                            <p>product Photo</p> 
                         </div>
 
                         <div className="specifications">
@@ -57,16 +57,16 @@ const Card=({product})=> {
                         </div>
                         
                     </div>
+
                     <div className="link">
                         <div></div>
                         <div></div>
-                        <li className="linkdiv" > 
-                                    <div className="izkVco">Link</div>
-                                    <div className="dWfJwo">
-                                        <a href={product.url}> View</a>{}
-                                    </div>
-                        </li>
-
+                        <div className="linkdiv" > 
+                            <div className="izkVco">Link</div>
+                            <div className="dWfJwo">
+                                <a href={product.url}> View</a>{}
+                            </div>
+                        </div>
                     </div>
                     
                 </div>
